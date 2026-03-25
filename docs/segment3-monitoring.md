@@ -1,29 +1,30 @@
-📊 Segment 3: Security & Monitoring
-1. Monitoring Strategy
-The monitoring framework ensures real-time visibility into infrastructure health and security events, focusing on SNMP for performance metrics and NTP for log synchronization.
+# 🌐 Segment 2: Network Core, VLANs & Redundancy
 
-2. Network Time Protocol (NTP)
-Synchronized time is critical for non-repudiation and accurate forensic analysis of system logs.
+## 1. Architectural Design
+The core of the network utilizes a **Hierarchical Model** to ensure that Layer 3 routing and redundancy are centralized at the Core Layer, while the Access Layer remains dedicated to high-speed end-device connectivity.
 
-NTP Master: CORE-SW A is configured as the authoritative time source (Stratum 8).
+### **VLAN Definition & Purpose**
+| VLAN ID | Name | Subnet | Purpose |
+| :--- | :--- | :--- | :--- |
+| 10 | IT_Admin | 192.168.10.0/24 | Privileged administrative access. |
+| 20 | Sales | 192.168.20.0/24 | General staff operations. |
+| 30 | Guest | 192.168.30.0/24 | Restricted internet-only access. |
+| 50 | Servers | 192.168.50.0/24 | Critical internal resources. |
+| 99 | Management | 192.168.99.0/24 | Device management (SSH/SNMP). |
 
-NTP Clients: All access layer switches and redundant core nodes synchronize to the Master via the Management VLAN (99).
+---
 
-Service Timestamps: Enabled globally to ensure logs record high-precision dates and times.
+## 2. Redundancy Implementation (HSRP)
+To prevent a single point of failure, **Hot Standby Router Protocol (HSRP)** was deployed across the Core Switches.
 
-3. SNMP Configuration
-Simple Network Management Protocol (SNMP) is used for read-only polling of device status and performance.
+### **Active/Standby Configuration Logic**
+* **Active Node (CORE-SW A):** Configured with a priority of **150**.
+* **Standby Node (CORE-SW B):** Configured with a default priority of **100**.
+* **Virtual IP (VIP):** All end devices point to `.1` as their default gateway.
 
-Community String: public_monitor (Read-Only).
-
-Access Control: Restricted via ACL 99, allowing only the Network Management Station (NMS) at 192.168.99.10 to poll devices.
-
-4. Syslog & Error Reporting
-The infrastructure is configured to report critical state changes, specifically focusing on security violations.
-
-Logging Level: Configured to capture Informational and above.
-
-Interface Tracking: Monitors for up/down events on critical trunk links.
-
-Final GitHub Health Check
-Based on your last terminal screenshot, your docs/segment1-iam.md has been modified but not yet committed.
+```bash
+interface Vlan10
+ ip address 192.168.10.2 255.255.255.0
+ standby 10 ip 192.168.10.1
+ standby 10 priority 150
+ standby 10 preempt
