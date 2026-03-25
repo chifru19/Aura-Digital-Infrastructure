@@ -1,4 +1,69 @@
-# 🏆 Final Project Report: Secure & Resilient LAN Architecture
+# 🏆 Secure and Redundant LAN Architecture
+> **Aura Digital Infrastructure Project**
+> [🔗 View Project Dashboard on Notion](https://www.notion.so/Project-Implementation-and-Verification-COMPLETE-2a930df39c4e801bbe8cc75e1a946c7a?source=copy_link)
+
+## 📖 Project Overview
+This project represents a fully implemented, verified, and documented **Enterprise-Grade LAN**. The goal was to move beyond a "flat" network to create a resilient environment using the **STRIDE** threat model and **Hierarchical Layer 2/3** design principles.
+
+---
+
+## 🛠️ Technical Toolkit
+* **Core Networking:** HSRP (Gateway Redundancy), Inter-VLAN Routing (SVI), VLAN Segmentation.
+* **Security & Hardening:** Extended ACLs (Inter-Subnet Firewall), Port Security (Sticky MACs), BPDU Guard.
+* **Infrastructure Services:** NTP (Time Sync), SNMPv2c (Monitoring), SSH v2 (Encrypted Management).
+* **Tools:** Cisco Packet Tracer, VS Code, Git/GitHub, Notion.
+
+---
+
+## 📐 System Architecture
+The network is divided into five functional VLANs to ensure strict traffic isolation and broadcast domain management:
+
+| VLAN | Name | Subnet | Role |
+| :--- | :--- | :--- | :--- |
+| 10 | IT_Admin | 192.168.10.0/24 | Privileged administrative access |
+| 20 | Sales | 192.168.20.0/24 | General staff operations |
+| 30 | Guest | 192.168.30.0/24 | Restricted internet-only access |
+| 50 | Servers | 192.168.50.0/24 | Critical internal resources |
+| 99 | Management | 192.168.99.0/24 | Infrastructure management (SSH/SNMP) |
+
+![System Architecture](images/architecture-diagram.png)
+
+---
+
+## 🛡️ Security & Redundancy Highlights
+### **1. High Availability (HSRP)**
+To eliminate single points of failure, **Hot Standby Router Protocol** was deployed. 
+* **Active:** CORE-SW A (Priority 150)
+* **Standby:** CORE-SW B (Priority 100)
+* **Result:** Virtual Gateway (`.1`) provides seamless failover in < 3 seconds.
+
+### **2. Inter-Subnet Firewall (ACL 199)**
+A "Zero Trust" approach was applied to the routing boundary. Extended ACLs prevent the **Guest** and **IT** subnets from accessing the **Management** subnet, protecting against internal lateral movement.
+
+### **3. Access Layer Hardening**
+* **Port Security:** Limited to 2 MAC addresses per port with `shutdown` violation mode.
+* **BPDU Guard:** Prevents unauthorized switches from being plugged into access ports, mitigating STP loops.
+
+---
+
+## 📝 Engineering Remediation Log
+| Phase | Issue Identified | Resolution |
+| :--- | :--- | :--- |
+| **L3 Routing** | SVI subnet mask set to /32 | Reconfigured all SVIs to standard /24 mask |
+| **Security** | ACL defined but not applied | Applied `ip access-group 199 in` to source SVIs |
+| **L2 Logic** | PC assigned to wrong VLAN | Corrected port membership on Access-SW to match subnet |
+
+---
+
+## ⚙️ Maintenance Runbook: Port Security Recovery
+**Scenario:** An interface enters `err-disabled` status due to a security violation.
+1. **Identify:** `show interface status err-disabled`
+2. **Mitigate:** Physically remove the unauthorized device.
+3. **Restore:** ```bash
+   conf t
+   interface [ID]
+   shutdown
+   no shutdown
 
 ## 1. Project Overview
 This project involved the design and deployment of a **Hierarchical Layer 2/3 Network** optimized for high availability and "Zero Trust" security. The architecture focuses on redundant gateways, micro-segmentation, and edge-layer hardening.
