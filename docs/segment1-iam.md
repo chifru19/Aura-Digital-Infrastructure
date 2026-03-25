@@ -1,42 +1,43 @@
-# Segment 1: User Management & Principle of Least Privilege (PoLP)
+🔑 Segment 1: Identity & Access Management (IAM)
+1. Governance Policy
+This project adheres to the Principle of Least Privilege (PoLP), ensuring that users and administrators have only the minimum level of access required to perform their functions.
 
-## 🎯 Objective
-To establish a secure baseline for Aura Digital’s file infrastructure by implementing strict access controls and automated lifecycle management for all users.
+2. Authentication & Authorization Implementation
+Administrative access to all infrastructure devices is secured via local database authentication with tiered privilege levels.
 
----
+Credential Security
+Encryption: All passwords are MD5-hashed using the enable secret and username secret commands to prevent clear-text disclosure in configuration files.
 
-## 🔒 Security Pillars
+Privilege Levels:
 
-### 1. Principle of Least Privilege (PoLP)
-* **Role-Based Grouping:** Users are segregated into role-specific groups (`employees`, `interns`).
-* **Granular Access:** Permissions are assigned only at the group level to ensure users have the minimum access necessary for their tasks.
-* **Segregation:** Clear distinction between permanent full-privilege access and temporary read-only privileges.
+Admin: Privilege Level 15 (Full access).
 
-### 2. Lifecycle Management & Account Control
-* **Automated Expiration:** Utilizing the `chage` utility to set hard expiration dates for temporary staff (e.g., Interns/Contractors).
-* **Password Policy:** Enforced 90-day maximum password age to mitigate the risk of long-term credential compromise.
+Operator: Restricted read-only access (where applicable).
 
----
+Management Access (SSH v2)
+Telnet is strictly disabled across the fabric. Remote management is enforced via SSH v2 to ensure all administrative traffic is encrypted in transit.
 
-## 🛠️ Implementation Evidence
+Bash
+! Device Management Configuration
+username admin privilege 15 secret [ENCRYPTED_HASH]
+line vty 0 4
+ transport input ssh
+ login local
+3. Account Lifecycle Management
+Automated Timeouts: exec-timeout 5 0 is applied to all VTY lines to prevent stale sessions.
 
-### Account Expiration (chage)
-To verify an account's security status, we use:
-`chage -l [username]`
+Access Control: Administrative access is restricted to the Management VLAN (99) via localized Access Control Lists.
 
-**Example Output Verification:**
-* **Account expires:** Nov 25, 2025
-* **Minimum Password Age:** 0
-* **Maximum Password Age:** 90
-## 📁 Automated Data Redundancy (Pillar 3)
-To ensure data integrity and disaster recovery, a custom Bash script (`/scripts/backup_aura.sh`) was developed.
+Final Troubleshooting Step for your Image
+To fix that persistent pathspec error for your diagram:
 
-**Key Features:**
-* **Automated Compression:** Uses `tar` to archive sensitive financial records.
-* **Retention Policy:** Automatically purges backups older than 30 days using the `find` command, ensuring the server stays compliant with storage limits.
-* **Scheduling:** Designed to run as a **Cron Job** for zero-touch operation.
-### Group Structure
-| User | Primary Group | Access Level |
-| :--- | :--- | :--- |
-| john_d | employees | Permanent / Full Access |
-| int_mary | interns | Temporary / Read-Only |
+Check your folder sidebar in VS Code. Do you see a file named architecture-diagram.png inside the images folder?
+
+If the file is actually on your Desktop or in Downloads, drag and drop it directly into the images folder in your VS Code explorer.
+
+Once you see it there, run:
+
+Bash
+git add images/architecture-diagram.png
+git commit -m "docs: finally fix architecture diagram"
+git push origin main
