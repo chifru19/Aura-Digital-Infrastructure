@@ -1,19 +1,7 @@
-# Segment 2: Network Configuration & VLAN Segmentation
-
-## 🌐 Network Topology
-The network utilizes a **Router-on-a-Stick** configuration with a Multilayer Switch at the core to handle Inter-VLAN routing and redundant gateway services.
-
-### VLAN Definitions
-| VLAN ID | Name | Subnet | Function |
-| :--- | :--- | :--- | :--- |
-| 10 | Staff | 192.168.10.0/24 | Standard employee workstations. |
-| 30 | Interns | 192.168.30.0/24 | Restricted guest/intern access. |
-| 50 | Servers | 192.168.50.0/24 | Mission-critical file and web servers. |
-| 99 | Native | 192.168.99.0/24 | Management and native traffic. |
-
----
-
-## ⚙️ Configuration Highlights
-* **DHCP Pools:** Automated IP assignment per VLAN.
-* **Spanning Tree (RSTP):** Configured to prevent Layer 2 loops and ensure fast convergence.
-* **Firewall Rules:** Initial ingress/egress filtering at the gateway level.
+🌐 Segment 2: Network Core, VLANs & Redundancy1. Architectural DesignThe core of the network utilizes a Hierarchical Model to ensure that Layer 3 routing and redundancy are centralized at the Core Layer, while the Access Layer remains dedicated to high-speed end-device connectivity.VLAN Definition & PurposeVLAN IDNameSubnetPurpose10IT_Admin192.168.10.0/24Privileged administrative access.20Sales192.168.20.0/24General staff operations.30Guest192.168.30.0/24Restricted internet-only access.50Servers192.168.50.0/24Critical internal resources.99Management192.168.99.0/24Device management (SSH/SNMP).2. Redundancy Implementation (HSRP)To prevent a single point of failure, Hot Standby Router Protocol (HSRP) was deployed across the Core Switches.Active/Standby Configuration LogicActive Node (CORE-SW A): Configured with a priority of 150 to ensure it remains the primary gateway under normal conditions.Standby Node (CORE-SW B): Configured with a default priority of 100 to automatically assume the gateway role if the primary fails.Virtual IP (VIP): All end devices point to .1 as their default gateway, which transparently shifts between physical switches.Bash! Configuration Example (CORE-SW A - VLAN 10)
+interface Vlan10
+ ip address 192.168.10.2 255.255.255.0
+ standby 10 ip 192.168.10.1
+ standby 10 priority 150
+ standby 10 preempt
+3. Engineering Remediation LogDuring the deployment phase, several critical Layer 3 errors were identified and resolved to ensure full inter-VLAN reachability.Issue IdentifiedRoot CauseResolutionRouting FailureSVI subnet mask was set to /32 (host route).Reconfigured all SVIs to a standard /24 mask.HSRP Role MismatchCORE-SW B was "Active" for VLAN 99 due to an unknown peer.Verified physical link status and re-synced HSRP election.VLAN MisalignmentAccess port Fa0/2 assigned to VLAN 99 instead of VLAN 20.Corrected port membership to match the Sales subnet IP.4. Operational VerificationSuccess is defined by the core switch's ability to maintain a consistent routing table while managing redundant states.Command: show standby briefExpected Result: CORE-SW A displays Active for all groups, while CORE-SW B displays Standby.Connectivity: Verified via successful ping from Sales (VLAN 20) to IT (VLAN 10).
