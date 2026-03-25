@@ -1,1 +1,37 @@
-🛡️ Segment 4: Threat Modeling & Validation1. Security Framework (STRIDE)This project utilized the STRIDE threat model to identify and mitigate risks across the infrastructure.Threat TypeSecurity PropertyMitigation AppliedStatusSpoofingAuthenticationExtended ACL 199 (Deny Guest access to Mgmt)✅ VerifiedTamperingIntegrityPort Security (Sticky MACs & Violation Shutdown)✅ VerifiedRepudiationNon-RepudiationNTP Sync & Standardized Logging Timestamps✅ VerifiedInformation DisclosureConfidentialityEncryption of passwords (enable secret) & SSH v2✅ VerifiedDenial of ServiceAvailabilityBPDU Guard to prevent rogue switch STP loops✅ Verified2. Functional Validation TestsTest A: Inter-Subnet Firewall (ACL 199)Objective: Ensure Guest (VLAN 30) cannot reach the Management Subnet (VLAN 99).Action: Attempted ping 192.168.99.2 from a Guest PC.Result: 100% Packet Loss.Proof: show access-lists 199 showed incrementing match counters for the deny statement.Test B: Gateway Redundancy (HSRP)Objective: Verify CORE-SW B takes over if CORE-SW A fails.Action: Manually shut down the VLAN interfaces on CORE-SW A.Result: Pass. CORE-SW B state changed from Standby to Active in < 3 seconds.3. Maintenance Runbook (SOP)To ensure long-term stability, a standard operating procedure for Port Security violations was established. If a port is found in the err-disabled state, administrators must:Identify the violation via show interface status err-disabled.Remove the unauthorized hardware.Perform a shutdown / no shutdown sequence to restore service.Final Project Sign-offAll security controls have been validated against the initial design requirements. The infrastructure is deemed Stable and Secure.
+# 🛡️ Segment 4: Threat Modeling & Validation
+
+## 1. Security Framework (STRIDE)
+This project utilized the **STRIDE** threat model to identify and mitigate risks across the infrastructure.
+
+| Threat Type | Security Property | Mitigation Applied | Status |
+| :--- | :--- | :--- | :--- |
+| **Spoofing** | Authentication | Extended ACL 199 (Deny Guest to Mgmt) | ✅ Verified |
+| **Tampering** | Integrity | Port Security (Sticky MACs & Shutdown) | ✅ Verified |
+| **Repudiation** | Non-Repudiation | NTP Sync & Logging Timestamps | ✅ Verified |
+| **Information Disclosure** | Confidentiality | Encryption & SSH v2 | ✅ Verified |
+| **Denial of Service** | Availability | BPDU Guard for STP protection | ✅ Verified |
+
+---
+
+## 2. Functional Validation Tests
+
+### **Test A: Inter-Subnet Firewall (ACL 199)**
+* **Objective:** Ensure Guest (VLAN 30) cannot reach Management (VLAN 99).
+* **Action:** Attempted `ping 192.168.99.2` from Guest PC.
+* **Result:** **100% Packet Loss.**
+* **Proof:** `show access-lists 199` showed incrementing match counters.
+
+### **Test B: Gateway Redundancy (HSRP)**
+* **Objective:** Verify CORE-SW B takeover.
+* **Action:** Manually shut down VLAN interfaces on CORE-SW A.
+* **Result:** **Pass.** CORE-SW B changed from `Standby` to `Active` in < 3 seconds.
+
+---
+
+## 3. Maintenance Runbook (SOP)
+To ensure long-term stability, a standard operating procedure for **Port Security** violations was established:
+1. Identify the violation via `show interface status err-disabled`.
+2. Remove the unauthorized hardware.
+3. Perform a `shutdown` / `no shutdown` sequence to restore service.
+
+**Final Project Sign-off:** All security controls validated. Infrastructure is **Stable and Secure**.
