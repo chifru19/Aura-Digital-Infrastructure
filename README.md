@@ -28,3 +28,4 @@ Click the links below to view the detailed implementation for each phase:
 * **Networking:** Cisco Packet Tracer, HSRP, RSTP, VLANs, ACLs.
 * **Systems:** Linux (Ubuntu/Debian), Bash, OpenSSH, `chage`.
 * **Security:** STRIDE Threat Modeling, NTP Forensics, SNMP Traps.
+![System Architecture Diagram](../images/architecture-diagram.png)
