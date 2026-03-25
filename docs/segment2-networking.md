@@ -1,7 +1,34 @@
-🌐 Segment 2: Network Core, VLANs & Redundancy1. Architectural DesignThe core of the network utilizes a Hierarchical Model to ensure that Layer 3 routing and redundancy are centralized at the Core Layer, while the Access Layer remains dedicated to high-speed end-device connectivity.VLAN Definition & PurposeVLAN IDNameSubnetPurpose10IT_Admin192.168.10.0/24Privileged administrative access.20Sales192.168.20.0/24General staff operations.30Guest192.168.30.0/24Restricted internet-only access.50Servers192.168.50.0/24Critical internal resources.99Management192.168.99.0/24Device management (SSH/SNMP).2. Redundancy Implementation (HSRP)To prevent a single point of failure, Hot Standby Router Protocol (HSRP) was deployed across the Core Switches.Active/Standby Configuration LogicActive Node (CORE-SW A): Configured with a priority of 150 to ensure it remains the primary gateway under normal conditions.Standby Node (CORE-SW B): Configured with a default priority of 100 to automatically assume the gateway role if the primary fails.Virtual IP (VIP): All end devices point to .1 as their default gateway, which transparently shifts between physical switches.Bash! Configuration Example (CORE-SW A - VLAN 10)
-interface Vlan10
- ip address 192.168.10.2 255.255.255.0
- standby 10 ip 192.168.10.1
- standby 10 priority 150
- standby 10 preempt
-3. Engineering Remediation LogDuring the deployment phase, several critical Layer 3 errors were identified and resolved to ensure full inter-VLAN reachability.Issue IdentifiedRoot CauseResolutionRouting FailureSVI subnet mask was set to /32 (host route).Reconfigured all SVIs to a standard /24 mask.HSRP Role MismatchCORE-SW B was "Active" for VLAN 99 due to an unknown peer.Verified physical link status and re-synced HSRP election.VLAN MisalignmentAccess port Fa0/2 assigned to VLAN 99 instead of VLAN 20.Corrected port membership to match the Sales subnet IP.4. Operational VerificationSuccess is defined by the core switch's ability to maintain a consistent routing table while managing redundant states.Command: show standby briefExpected Result: CORE-SW A displays Active for all groups, while CORE-SW B displays Standby.Connectivity: Verified via successful ping from Sales (VLAN 20) to IT (VLAN 10).
+# 🌐 Segment 2: Network Core, VLANs & Redundancy
+
+## 1. Architectural Design
+The network uses a **Hierarchical Model** to centralize Layer 3 routing at the Core Layer while keeping the Access Layer dedicated to high-speed connectivity.
+
+### **VLAN Definition & Purpose**
+| VLAN ID | Name | Subnet | Purpose |
+| :--- | :--- | :--- | :--- |
+| 10 | IT_Admin | 192.168.10.0/24 | Privileged admin access |
+| 20 | Sales | 192.168.20.0/24 | General staff operations |
+| 30 | Guest | 192.168.30.0/24 | Restricted internet access |
+| 99 | Management | 192.168.99.0/24 | SSH/SNMP management |
+
+---
+
+## 2. Redundancy Implementation (HSRP)
+**Hot Standby Router Protocol (HSRP)** ensures zero downtime by providing a virtual gateway (.1) that floats between Core Switches.
+
+* **CORE-SW A:** Priority 150 (Active)
+* **CORE-SW B:** Priority 100 (Standby)
+
+---
+
+## 3. Engineering Remediation Log
+| Issue | Root Cause | Resolution |
+| :--- | :--- | :--- |
+| Routing Failure | SVI mask set to /32 | Reconfigured to /24 |
+| VLAN Misalignment | Port Fa0/2 in VLAN 99 | Reassigned to VLAN 20 |
+
+---
+
+## 4. Operational Verification
+* **Command:** `show standby brief`
+* **Success:** CORE-SW A is Active; CORE-SW B is Standby.
