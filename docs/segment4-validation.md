@@ -34,4 +34,4 @@ To ensure long-term stability, a standard operating procedure for **Port Securit
 2. Remove the unauthorized hardware.
 3. Perform a `shutdown` / `no shutdown` sequence to restore service.
 
-**Final Project Sign-off:** All security controls validated. Infrastructure is **Stable and Secure**.
+**Final Project Sign-off:** All security controls validated. Infrastructure is **Stable and Secure**.- Fixed HSRP neighbor visibility by configuring Gig0/1-2 as trunks on both Core switches.
