@@ -65,3 +65,6 @@ conf t
 interface [Interface_ID]
 shutdown
 no shutdown
+Status: 🟢 VERIFIED & COMPLETE Last Update: April 2026
+
+Contributor: chifru19 (Frank Fru)
