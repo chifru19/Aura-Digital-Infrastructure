@@ -1,5 +1,5 @@
 # 🏆 Secure and Redundant LAN Architecture
-<<<<<<< HEAD
+ HEAD
 ### Aura Digital Infrastructure Project | [🔗 View Project Dashboard on Notion](https://notion.so)
 
 ## 📖 Project Overview
@@ -22,7 +22,7 @@ This project represents a fully implemented, verified, and documented **Enterpri
 ---
 
 ## 📐 System Architecture
-<<<<<<< HEAD
+ HEAD
 The network is segmented into five functional VLANs to ensure strict traffic isolation and broadcast domain management:
 =======
 The network is segmented into functional VLANs to ensure strict traffic isolation and broadcast domain management:
@@ -38,7 +38,7 @@ The network is segmented into functional VLANs to ensure strict traffic isolatio
 
 ---
 
-<<<<<<< HEAD
+HEAD
 ## 🛡️ Security & Redundancy Highlights
 =======
 ## 🛡️ Security & Redundant Highlights
@@ -48,16 +48,16 @@ The network is segmented into functional VLANs to ensure strict traffic isolatio
 To eliminate single points of failure, **Hot Standby Router Protocol** was deployed across the Core Layer.
 * **Active:** CORE-SW A (Priority 150)
 * **Standby:** CORE-SW B (Priority 100)
-<<<<<<< HEAD
+ HEAD
 * **Result:** The Virtual Gateway IP (`.1`) provides seamless failover in < 3 seconds.
 =======
 * **Result:** Virtual Gateway IP (`.1`) provides seamless failover in < 3 seconds.
->>>>>>> a808a00 (docs: final overhaul of README with MitM security layers)
+ a808a00 (docs: final overhaul of README with MitM security layers)
 
 ### 2. Inter-Subnet Firewall (ACL 199)
 A **Zero Trust** approach was applied to the routing boundary. Extended ACLs prevent the **Guest** and **IT** subnets from accessing the **Management** plane, mitigating internal lateral movement.
 
-<<<<<<< HEAD
+ HEAD
 ### 3. Access Layer Hardening
 =======
 ### 3. Man-in-the-Middle (MitM) Mitigation
@@ -65,7 +65,7 @@ A **Zero Trust** approach was applied to the routing boundary. Extended ACLs pre
 * **Dynamic ARP Inspection (DAI):** Validates ARP packets against the DHCP binding database to eliminate ARP poisoning and spoofing.
 
 ### 4. Access Layer Hardening
->>>>>>> a808a00 (docs: final overhaul of README with MitM security layers)
+ a808a00 (docs: final overhaul of README with MitM security layers)
 * **Port Security:** Limited to 2 MAC addresses per port (PC + IP Phone) using `sticky` learning and `shutdown` violation mode.
 * **BPDU Guard:** Globally enabled on all PortFast access ports to automatically disable interfaces if a rogue switch is detected.
 
