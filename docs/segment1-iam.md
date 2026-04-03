@@ -28,16 +28,3 @@ Automated Timeouts: exec-timeout 5 0 is applied to all VTY lines to prevent stal
 
 Access Control: Administrative access is restricted to the Management VLAN (99) via localized Access Control Lists.
 
-Final Troubleshooting Step for your Image
-To fix that persistent pathspec error for your diagram:
-
-Check your folder sidebar in VS Code. Do you see a file named architecture-diagram.png inside the images folder?
-
-If the file is actually on your Desktop or in Downloads, drag and drop it directly into the images folder in your VS Code explorer.
-
-Once you see it there, run:
-
-Bash
-git add images/architecture-diagram.png
-git commit -m "docs: finally fix architecture diagram"
-git push origin main
