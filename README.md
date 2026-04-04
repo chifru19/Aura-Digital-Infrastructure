@@ -138,3 +138,9 @@ Contributor: chifru19 (Frank Fru)
 - **Port Security**: Sticky MAC learning prevents unauthorized hardware access.
 - **DHCP Snooping**: Trusted/Untrusted boundary protection against rogue DHCP servers.
 - **SSH v2**: Encrypted management sessions restricted by VTY Access-Lists.
+
+## 🚀 Final Infrastructure Specs
+* **High Availability:** HSRP active on all VLANs with priority-based preemption.
+* **Edge Defense:** Port-security with Sticky MAC learning (Layer 2).
+* **IP Protection:** DHCP Snooping enabled across the core to prevent MITM attacks.
+* **Secure Access:** SSH v2 encryption with VTY access-lists for admin subnets.
