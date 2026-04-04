@@ -120,3 +120,10 @@ Status: 🟢 VERIFIED & COMPLETE Last Update: April 2026
 
 Contributor: chifru19 (Frank Fru)
  a808a00 (docs: final overhaul of README with MitM security layers)
+## ✅ Final Security Verification
+| Feature | CLI Command | Success Criteria |
+| :--- | :--- | :--- |
+| **Redundancy** | `do show standby brief` | All VLANs show 'Active' on Sw1 |
+| **Port Security** | `do show port-security` | All edge ports show 'Secure-up' |
+| **DHCP Integrity** | `do show ip dhcp snooping` | VLANs 10, 20, 30, 50, 99 active |
+| **SSH Security** | `do show ip ssh` | Version 2.0 confirmed |
