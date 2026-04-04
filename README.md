@@ -127,3 +127,14 @@ Contributor: chifru19 (Frank Fru)
 | **Port Security** | `do show port-security` | All edge ports show 'Secure-up' |
 | **DHCP Integrity** | `do show ip dhcp snooping` | VLANs 10, 20, 30, 50, 99 active |
 | **SSH Security** | `do show ip ssh` | Version 2.0 confirmed |
+## 🛡️ Project Aura Security Specification
+* **HSRP Redundancy:** Confirmed Active/Standby for all production VLANs.
+* **Port Security:** Sticky MAC address enforcement on access ports.
+* **DHCP Snooping:** Rogue server mitigation globally enabled for VLANs 10, 20, 30, 50, 99.
+* **Management:** Encrypted SSH v2 sessions with VTY Access-Lists.
+
+## 🛡️ Security Implementation Details
+- **HSRP Redundancy**: Active/Standby failover for gateway resilience.
+- **Port Security**: Sticky MAC learning prevents unauthorized hardware access.
+- **DHCP Snooping**: Trusted/Untrusted boundary protection against rogue DHCP servers.
+- **SSH v2**: Encrypted management sessions restricted by VTY Access-Lists.
