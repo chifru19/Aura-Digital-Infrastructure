@@ -144,3 +144,5 @@ Contributor: chifru19 (Frank Fru)
 * **Edge Defense:** Port-security with Sticky MAC learning (Layer 2).
 * **IP Protection:** DHCP Snooping enabled across the core to prevent MITM attacks.
 * **Secure Access:** SSH v2 encryption with VTY access-lists for admin subnets.
+
+![Aura Logical Topology](images/aura_logical_topology.png)
